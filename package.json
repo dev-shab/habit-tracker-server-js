@@ -5,7 +5,8 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon --exec tsx src/index.ts"
+    "dev": "nodemon --exec tsx src/index.ts",
+    "format": "prettier --write ."
   },
   "keywords": [
     "habit"
@@ -14,6 +15,7 @@
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }
