@@ -1,1 +1,1 @@
-console.log("Welcome to habit tracker");
+console.log("Welcome to habit tracker!");
