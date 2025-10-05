@@ -1,7 +1,7 @@
 import express, { type Request, type Response } from "express";
+import { PORT } from "@/utils/config.js";
 
 const app = express();
-const PORT = 3000;
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).send("Hello from Habit Tracker");
