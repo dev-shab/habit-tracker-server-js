@@ -2,16 +2,19 @@
   "name": "habit-tracker-server",
   "version": "1.0.0",
   "description": "Backend for habit tracker",
+  "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon --exec tsx src/index.ts"
   },
   "keywords": [
     "habit"
   ],
   "author": "dev-shab",
   "license": "ISC",
-  "dependencies": {
-    "nodemon": "^3.1.10"
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   }
 }
