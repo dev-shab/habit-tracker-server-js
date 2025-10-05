@@ -6,7 +6,7 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon --exec tsx src/index.ts",
-    "format": "prettier --write ."
+    "format": "prettier --write . && npx eslint . --fix"
   },
   "keywords": [
     "habit"
@@ -15,6 +15,9 @@
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^5.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.45.0",
+    "@typescript-eslint/parser": "^8.45.0",
+    "eslint": "^9.37.0",
     "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
     "tsx": "^4.20.6",
