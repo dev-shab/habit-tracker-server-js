@@ -1,7 +1,14 @@
 import express, { type Request, type Response } from "express";
-import { PORT } from "@/utils/config.js";
+import { MONGODB_CONNECTION_STRING, PORT } from "@/utils/config.js";
+import mongoose from "mongoose";
 
 const app = express();
+
+if (MONGODB_CONNECTION_STRING) {
+  mongoose.connect(MONGODB_CONNECTION_STRING).then(() => {
+    console.log("Connected to DB");
+  });
+}
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).send("Hello from Habit Tracker");

@@ -11,3 +11,4 @@ const getEnv = (key: string, fallback?: string) => {
 };
 
 export const PORT = getEnv("PORT", "3000");
+export const MONGODB_CONNECTION_STRING = getEnv("MONGODB_CONNECTION_STRING");
