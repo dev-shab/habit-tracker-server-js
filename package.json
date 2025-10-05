@@ -1,0 +1,14 @@
+{
+  "name": "habit-tracker-server",
+  "version": "1.0.0",
+  "description": "Backend for habit tracker",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node src/index.js"
+  },
+  "keywords": [
+    "habit"
+  ],
+  "author": "dev-shab",
+  "license": "ISC"
+}
