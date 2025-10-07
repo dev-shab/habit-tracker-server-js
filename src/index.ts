@@ -3,6 +3,8 @@ import { MONGODB_CONNECTION_STRING, PORT } from "@/utils/config.js";
 import mongoose from "mongoose";
 import { setupSwagger } from "./utils/swagger.js";
 import ApiError from "@/utils/ApiError.js";
+import { BASE_URL } from "./utils/constants.js";
+import userRouter from "./routes/authRoutes.js";
 
 const app = express();
 
@@ -16,9 +18,7 @@ if (MONGODB_CONNECTION_STRING) {
   });
 }
 
-app.get("/", (req: Request, res: Response) => {
-  res.status(200).send("Hello from Habit Tracker");
-});
+app.use(`${BASE_URL}/auth`, userRouter);
 
 app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
