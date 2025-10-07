@@ -1,36 +1,16 @@
-import swaggerJsdoc from "swagger-jsdoc";
+import path from "path";
 import swaggerUi from "swagger-ui-express";
+import SwaggerParser from "@apidevtools/swagger-parser";
 import { type Express } from "express";
-import { PORT } from "@/utils/config.js";
 
-const options = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "My Project API",
-      version: "1.0.0",
-      description: "API documentation for my project",
-    },
-    servers: [
-      {
-        url: `http://localhost:${PORT}/api/v1/`,
-      },
-    ],
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "JWT",
-        },
-      },
-    },
-  },
-  apis: ["./src/routes/*.ts"],
-};
+export async function setupSwagger(app: Express) {
+  try {
+    const swaggerDocument = await SwaggerParser.bundle(
+      path.resolve(process.cwd(), "src/swagger/index.yaml")
+    );
 
-const swaggerSpec = swaggerJsdoc(options);
-
-export function setupSwagger(app: Express) {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  } catch (error) {
+    console.error("Error setting up Swagger UI by parsing files");
+  }
 }

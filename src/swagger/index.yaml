@@ -1,0 +1,20 @@
+openapi: 3.0.3
+info:
+  title: Habit Tracker API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api/v1
+
+paths:
+  /auth/signup:
+    $ref: "./paths/auth/signup.yaml"
+  /auth/login:
+    $ref: "./paths/auth/login.yaml"
+  /auth/logout:
+    $ref: "./paths/auth/logout.yaml"
+
+components:
+  schemas:
+    User:
+      $ref: "./schemas/User.yaml"

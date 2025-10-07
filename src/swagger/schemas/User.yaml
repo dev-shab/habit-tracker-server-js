@@ -1,0 +1,33 @@
+type: object
+required:
+  - name
+  - email
+  - passwordHash
+properties:
+  _id:
+    type: string
+    description: MongoDB ObjectId of the user
+    example: "652b1c74f3d8e7a5a6e8c2b4"
+  name:
+    type: string
+    description: Full name of the user
+    example: "John Doe"
+  email:
+    type: string
+    format: email
+    description: Unique email address of the user
+    example: "john@example.com"
+  passwordHash:
+    type: string
+    description: Hashed password
+    example: "$2b$10$eW5l2F2kXG7V8..."
+  createdAt:
+    type: string
+    format: date-time
+    description: Timestamp when the user was created
+    example: "2025-10-05T14:30:00.000Z"
+  updatedAt:
+    type: string
+    format: date-time
+    description: Timestamp when the user was last updated
+    example: "2025-10-05T15:00:00.000Z"
