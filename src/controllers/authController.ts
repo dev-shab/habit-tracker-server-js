@@ -1,10 +1,10 @@
 import { loginUser, signupUser } from "@/services/authService.js";
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 
 export const signUp = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { name, email, password } = req.body;
@@ -34,7 +34,7 @@ export const signUp = async (
 export const login = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { email, password } = req.body;

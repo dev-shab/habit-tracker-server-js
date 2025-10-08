@@ -6,7 +6,7 @@ import { generateToken } from "@/utils/jwt.js";
 export const signupUser = async (
   name: string,
   email: string,
-  password: string
+  password: string,
 ) => {
   const existing = await User.findOne({ email });
   if (existing) {

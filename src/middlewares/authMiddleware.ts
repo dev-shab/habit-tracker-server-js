@@ -2,12 +2,12 @@ import jwt from "jsonwebtoken";
 import { type Request, type Response, type NextFunction } from "express";
 import ApiError from "@/utils/ApiError.js";
 import { JWT_SECRET } from "@/utils/config.js";
-import { UserPayload } from "@/types/express.d.js";
+import { type UserPayload } from "@/types/express.d.js";
 
 export const authMiddleware = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const token = req.cookies.token;
 
@@ -20,6 +20,7 @@ export const authMiddleware = (
     req.user = decoded as UserPayload;
     next();
   } catch (error) {
+    console.error(error);
     throw new ApiError("Invalid or Expired Tokens", 401);
   }
 };

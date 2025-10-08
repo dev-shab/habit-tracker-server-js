@@ -19,7 +19,7 @@ const habitSchema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export const Habit = model("Habit", habitSchema);

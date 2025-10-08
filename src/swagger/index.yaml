@@ -13,6 +13,8 @@ paths:
     $ref: "./paths/auth/login.yaml"
   /auth/logout:
     $ref: "./paths/auth/logout.yaml"
+  /habits:
+    $ref: "./paths/habits.yaml"
 
 components:
   schemas:

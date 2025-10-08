@@ -1,0 +1,68 @@
+post:
+  summary: Create a new habit
+  description: Creates a new habit for the authenticated user.
+  tags:
+    - Habits
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              description: The name of the habit.
+              example: "Drink Water"
+            color:
+              type: string
+              description: (Optional) Hex or string color to represent the habit.
+              example: "#00FFAA"
+            order:
+              type: integer
+              description: (Optional) Custom order index for habit sorting.
+              example: 3
+  responses:
+    "201":
+      description: Habit created successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: Habit Created Successfully
+              data:
+                $ref: "./../schemas/Habit.yaml"
+    "400":
+      description: Validation error - Habit name missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+    "401":
+      description: Unauthorized - user not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+    "409":
+      description: Duplicate habit name conflict.
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
