@@ -18,3 +18,5 @@ components:
   schemas:
     User:
       $ref: "./schemas/User.yaml"
+    Habit:
+      $ref: "./schemas/Habit.yaml"

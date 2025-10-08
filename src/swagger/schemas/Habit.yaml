@@ -1,0 +1,35 @@
+type: object
+required:
+  - userId
+  - name
+properties:
+  _id:
+    type: string
+    description: MongoDB ObjectId of the habit
+    example: "652b1c74f3d8e7a5a6e8c2b4"
+  userId:
+    type: string
+    description: MongoDB ObjectId of the user associated with this habit
+    example: "652b1c74f3d8e7a7a6e8c2b4"
+  name:
+    type: string
+    description: Name of the habit
+    example: "Workout"
+  color:
+    type: string
+    description: Hex Color for the habit
+    example: "#FF9B71"
+  order:
+    type: number
+    description: Order in which habit is displayed
+    example: 3
+  createdAt:
+    type: string
+    format: date-time
+    description: Timestamp when the user was created
+    example: "2025-10-05T14:30:00.000Z"
+  updatedAt:
+    type: string
+    format: date-time
+    description: Timestamp when the user was last updated
+    example: "2025-10-05T15:00:00.000Z"
