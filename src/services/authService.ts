@@ -6,17 +6,25 @@ import { generateToken } from "@/utils/jwt.js";
 export const signupUser = async (
   name: string,
   email: string,
-  password: string,
+  password: string
 ) => {
-  const existing = await User.findOne({ email });
+  if (!name || name.trim().length === 0) {
+    throw new ApiError("User Name is Required", 400);
+  }
+
+  if (!email || email.trim().length === 0) {
+    throw new ApiError("User Email is Required", 400);
+  }
+
+  const existing = await User.findOne({ email: email.trim() });
   if (existing) {
     throw new ApiError("User already exists", 409);
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
   const user = await User.create({
-    name,
-    email,
+    name: name.trim(),
+    email: email.trim(),
     passwordHash,
   });
 

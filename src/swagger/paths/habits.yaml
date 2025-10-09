@@ -66,3 +66,42 @@ post:
         application/json:
           schema:
             $ref: "./../schemas/Error.yaml"
+
+get:
+  summary: Get all habits
+  description: Fetches all habits for the authenticated user.
+  tags:
+    - Habits
+  security:
+    - bearerAuth: []
+  responses:
+    "201":
+      description: Habits fetched successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: Habits fetched Successfully
+              data:
+                type: array
+                items:
+                  type: object
+                  $ref: "./../schemas/Habit.yaml"
+    "401":
+      description: Unauthorized - user not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"

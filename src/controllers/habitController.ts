@@ -30,3 +30,25 @@ export const createHabit = async (
     next(error);
   }
 };
+
+export const getHabits = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.user) {
+      throw new ApiError("Unauthorised", 401);
+    }
+
+    const habits = await habitService.getHabits(req.user.id.toString());
+
+    res.status(209).json({
+      success: true,
+      message: "Habits Fetched Successfully",
+      data: habits,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

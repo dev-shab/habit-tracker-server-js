@@ -6,7 +6,7 @@ import express, {
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import { MONGODB_CONNECTION_STRING, PORT } from "@/utils/config.js";
-import { setupSwagger } from "./utils/swagger.js";
+import { setupSwagger } from "@/utils/swagger.js";
 import type ApiError from "@/utils/ApiError.js";
 import { BASE_URL } from "@/utils/constants.js";
 import userRouter from "@/routes/authRoutes.js";

@@ -8,7 +8,7 @@ export const createHabit = async (
   order?: number
 ) => {
   if (!name || name.trim().length === 0) {
-    throw new ApiError("Habit Name is Required", 409);
+    throw new ApiError("Habit Name is Required", 400);
   }
 
   const existing = await Habit.findOne({ userId, name: name.trim() });
@@ -25,4 +25,9 @@ export const createHabit = async (
 
   const habit = await Habit.create({ userId, name, color, order });
   return habit;
+};
+
+export const getHabits = async (userId: string) => {
+  const habits = await Habit.find({ userId });
+  return habits;
 };
