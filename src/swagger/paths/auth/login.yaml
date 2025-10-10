@@ -71,11 +71,7 @@ post:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                example: false
-              message:
-                type: string
-                example: Invalid Credentials
+            $ref: "../../schemas/Error.yaml"
+          example:
+            success: false
+            message: Invalid Credentials
