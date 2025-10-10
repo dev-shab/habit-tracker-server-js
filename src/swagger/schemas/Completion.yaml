@@ -1,0 +1,34 @@
+type: object
+properties:
+  _id:
+    type: string
+    description: Unique identifier for the completion
+    example: "507f191e810c19729de860ea"
+  habitId:
+    type: string
+    description: ID of the habit that was completed
+    example: "507f191e810c19729de860eb"
+  userId:
+    type: string
+    description: ID of the user who completed the habit
+    example: "507f191e810c19729de860ec"
+  date:
+    type: string
+    format: date-time
+    description: Date when the habit was completed (start of day)
+    example: "2025-10-10T00:00:00.000Z"
+  createdAt:
+    type: string
+    format: date-time
+    description: When this record was created
+    example: "2025-10-10T14:30:00.000Z"
+  updatedAt:
+    type: string
+    format: date-time
+    description: When this record was last updated
+    example: "2025-10-10T14:30:00.000Z"
+required:
+  - _id
+  - habitId
+  - userId
+  - date

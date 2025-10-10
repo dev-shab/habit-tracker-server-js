@@ -11,6 +11,7 @@ import type ApiError from "@/utils/ApiError.js";
 import { BASE_URL } from "@/utils/constants.js";
 import userRouter from "@/routes/authRoutes.js";
 import habitsRouter from "@/routes/habitsRoutes.js";
+import completionsRouter from "./routes/completionsRoutes.js";
 
 const app = express();
 
@@ -27,6 +28,7 @@ if (MONGODB_CONNECTION_STRING) {
 
 app.use(`${BASE_URL}/auth`, userRouter);
 app.use(`${BASE_URL}/habits`, habitsRouter);
+app.use(`${BASE_URL}/completions`, completionsRouter);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {

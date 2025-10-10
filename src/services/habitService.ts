@@ -1,3 +1,4 @@
+import { Completion } from "@/models/Completion.js";
 import { Habit } from "@/models/Habit.js";
 import ApiError from "@/utils/ApiError.js";
 
@@ -5,7 +6,7 @@ export const createHabit = async (
   userId: string,
   name: string,
   color?: string,
-  order?: number,
+  order?: number
 ) => {
   if (!name || name.trim().length === 0) {
     throw new ApiError("Habit Name is Required", 400);
@@ -39,7 +40,7 @@ export const editHabit = async (
     name?: string;
     color?: string;
     order?: number;
-  },
+  }
 ) => {
   if (!habitId) {
     throw new ApiError("Habit ID is required", 400);
@@ -76,7 +77,7 @@ export const editHabit = async (
   const updatedHabit = await Habit.findByIdAndUpdate(
     habitId,
     { $set: updates },
-    { new: true },
+    { new: true }
   );
 
   return updatedHabit;
@@ -98,6 +99,7 @@ export const deleteHabit = async (habitId: string, userId: string) => {
   }
 
   await Habit.findByIdAndDelete(habitId);
+  await Completion.deleteMany({ habitId, userId });
 
   return;
 };

@@ -4,6 +4,7 @@ const habitSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
     name: {
@@ -19,7 +20,9 @@ const habitSchema = new Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
+
+habitSchema.index({ userId: 1, name: 1 }, { unique: true });
 
 export const Habit = model("Habit", habitSchema);
