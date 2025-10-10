@@ -50,3 +50,26 @@ export const getCompletionsByHabit = async (
     next(error);
   }
 };
+
+export const deleteCompletion = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { habitId, date } = req.params;
+
+    await completionService.deleteCompletion(
+      habitId,
+      req.user!.id.toString(),
+      date
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Habit unmarked successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};

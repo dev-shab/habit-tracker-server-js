@@ -1,0 +1,155 @@
+delete:
+  summary: Unmark a habit completion
+  description: |
+    Deletes a completion record for a specific habit on a specific date.
+    This effectively "unmarks" the habit as complete for that day.
+
+    **Use Cases:**
+    - User accidentally marked habit complete
+    - User wants to correct their tracking
+    - Undo a completion
+
+    **Note:** This is a permanent deletion. The completion record will be removed from the database.
+  tags:
+    - Completions
+  security:
+    - cookieAuth: []
+  parameters:
+    - name: habitId
+      in: path
+      required: true
+      description: The unique identifier of the habit
+      schema:
+        type: string
+        pattern: "^[0-9a-fA-F]{24}$"
+        example: "507f191e810c19729de860ea"
+      example: "507f191e810c19729de860ea"
+
+    - name: date
+      in: path
+      required: true
+      description: |
+        The date to unmark (YYYY-MM-DD format).
+        Must match exactly with an existing completion record.
+      schema:
+        type: string
+        format: date
+        pattern: '^\d{4}-\d{2}-\d{2}$'
+        example: "2025-10-10"
+      examples:
+        today:
+          value: "2025-10-10"
+          summary: October 10th, 2025
+        yesterday:
+          value: "2025-10-09"
+          summary: October 9th, 2025
+
+  responses:
+    "200":
+      description: Habit unmarked successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Habit unmarked successfully"
+          examples:
+            success:
+              summary: Successfully unmarked
+              value:
+                success: true
+                message: "Habit unmarked successfully"
+
+    "400":
+      description: Bad Request - Validation error
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          examples:
+            missingHabitId:
+              summary: Habit ID missing
+              value:
+                success: false
+                message: "Habit ID is required"
+
+            missingDate:
+              summary: Date missing
+              value:
+                success: false
+                message: "Date is required"
+
+            invalidDateFormat:
+              summary: Invalid date format
+              value:
+                success: false
+                message: "Invalid date format. Use YYYY-MM-DD"
+
+            invalidDate:
+              summary: Invalid date value
+              value:
+                success: false
+                message: "Invalid date"
+
+    "401":
+      description: Unauthorized - User not authenticated
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          examples:
+            notAuthenticated:
+              summary: No authentication token provided
+              value:
+                success: false
+                message: "Authentication required"
+
+            invalidToken:
+              summary: Invalid or expired token
+              value:
+                success: false
+                message: "Invalid token"
+
+    "403":
+      description: Forbidden - User does not own this habit
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: "Unauthorized to unmark this habit"
+
+    "404":
+      description: Not Found - Habit or completion does not exist
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          examples:
+            habitNotFound:
+              summary: Habit does not exist
+              value:
+                success: false
+                message: "Habit not found"
+
+            completionNotFound:
+              summary: No completion record for this date
+              value:
+                success: false
+                message: "Completion not found for this date"
+
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: "Internal server error"

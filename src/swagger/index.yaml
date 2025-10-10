@@ -21,6 +21,8 @@ paths:
     $ref: "./paths/completions.yaml"
   /completions/habit/{habitId}:
     $ref: "./paths/completionsByHabit.yaml"
+  /completions/{habitId}/{date}:
+    $ref: "./paths/deleteCompletion.yaml"
 
 components:
   schemas:
