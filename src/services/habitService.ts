@@ -31,3 +31,53 @@ export const getHabits = async (userId: string) => {
   const habits = await Habit.find({ userId });
   return habits;
 };
+
+export const editHabit = async (
+  habitId: string,
+  userId: string,
+  updates: {
+    name?: string;
+    color?: string;
+    order?: number;
+  }
+) => {
+  if (!habitId) {
+    throw new ApiError("Habit ID is required", 400);
+  }
+
+  const habit = await Habit.findById(habitId);
+
+  if (!habit) {
+    throw new ApiError("Habit not found", 404);
+  }
+
+  if (habit.userId.toString() !== userId) {
+    throw new ApiError("Unauthorised to edit this Habit", 403);
+  }
+
+  if (updates.name !== undefined) {
+    if (!updates.name || updates.name.length === 0) {
+      throw new ApiError("Habit Name cannot be empthy", 400);
+    }
+
+    const duplicate = await Habit.findOne({
+      userId,
+      name: updates.name.trim(),
+      _id: { $ne: habitId },
+    });
+
+    if (duplicate) {
+      throw new ApiError("Habit with this name already exists", 409);
+    }
+
+    updates.name = updates.name.trim();
+  }
+
+  const updatedHabit = await Habit.findByIdAndUpdate(
+    habitId,
+    { $set: updates },
+    { new: true }
+  );
+
+  return updatedHabit;
+};

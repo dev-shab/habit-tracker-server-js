@@ -48,18 +48,27 @@ post:
         application/json:
           schema:
             $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Habit name cannot be empty
     "401":
       description: Unauthorized - user not authenticated.
       content:
         application/json:
           schema:
             $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Unauthorized
     "409":
       description: Duplicate habit name conflict.
       content:
         application/json:
           schema:
             $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Habit with this name already exists
     "500":
       description: Internal server error.
       content:
@@ -99,6 +108,9 @@ get:
         application/json:
           schema:
             $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Unauthorized
     "500":
       description: Internal server error.
       content:

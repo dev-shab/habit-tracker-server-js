@@ -1,0 +1,101 @@
+put:
+  summary: Update a habit
+  description: Updates an existing habit for the authenticated user. Only provided fields will be updated.
+  tags:
+    - Habits
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: The ID of the habit to update
+      schema:
+        type: string
+        example: "507f191e810c19729de860ea"
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The new name of the habit
+              example: "Morning Exercise"
+            color:
+              type: string
+              description: Hex or string color to represent the habit
+              example: "#FF5733"
+            order:
+              type: integer
+              description: Custom order index for habit sorting
+              example: 2
+  responses:
+    "200":
+      description: Habit updated successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: Habit updated successfully
+              data:
+                $ref: "./../schemas/Habit.yaml"
+    "400":
+      description: Validation error - Invalid habit name or data
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Habit name cannot be empty
+    "401":
+      description: Unauthorized - user not authenticated
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Unauthorized
+    "403":
+      description: Forbidden - user does not own this habit
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Unauthorized to edit this habit
+    "404":
+      description: Habit not found
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Habit not found
+    "409":
+      description: Duplicate habit name conflict
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Habit with this name already exists
+    "500":
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
