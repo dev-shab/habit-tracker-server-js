@@ -9,18 +9,24 @@ export const authMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
-  const token = req.cookies.token;
-
-  if (!token) {
-    throw new ApiError("Not Authenticated", 401);
-  }
-
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded as UserPayload;
+    const token = req.cookies.token;
+
+    if (!token) {
+      throw new ApiError("Authentication required", 401);
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET) as UserPayload;
+    req.user = decoded;
+
     next();
   } catch (error) {
-    console.error(error);
-    throw new ApiError("Invalid or Expired Tokens", 401);
+    if (error instanceof jwt.JsonWebTokenError) {
+      return next(new ApiError("Invalid token", 401));
+    }
+    if (error instanceof jwt.TokenExpiredError) {
+      return next(new ApiError("Token expired", 401));
+    }
+    next(error);
   }
 };

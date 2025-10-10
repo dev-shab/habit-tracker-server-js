@@ -5,7 +5,7 @@ export const createHabit = async (
   userId: string,
   name: string,
   color?: string,
-  order?: number
+  order?: number,
 ) => {
   if (!name || name.trim().length === 0) {
     throw new ApiError("Habit Name is Required", 400);
@@ -28,7 +28,7 @@ export const createHabit = async (
 };
 
 export const getHabits = async (userId: string) => {
-  const habits = await Habit.find({ userId });
+  const habits = await Habit.find({ userId }).sort({ order: 1 });
   return habits;
 };
 
@@ -39,7 +39,7 @@ export const editHabit = async (
     name?: string;
     color?: string;
     order?: number;
-  }
+  },
 ) => {
   if (!habitId) {
     throw new ApiError("Habit ID is required", 400);
@@ -57,7 +57,7 @@ export const editHabit = async (
 
   if (updates.name !== undefined) {
     if (!updates.name || updates.name.length === 0) {
-      throw new ApiError("Habit Name cannot be empthy", 400);
+      throw new ApiError("Habit Name cannot be empty", 400);
     }
 
     const duplicate = await Habit.findOne({
@@ -76,7 +76,7 @@ export const editHabit = async (
   const updatedHabit = await Habit.findByIdAndUpdate(
     habitId,
     { $set: updates },
-    { new: true }
+    { new: true },
   );
 
   return updatedHabit;

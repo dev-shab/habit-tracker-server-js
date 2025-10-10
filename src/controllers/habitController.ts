@@ -1,24 +1,19 @@
 import { type Request, type Response, type NextFunction } from "express";
 import * as habitService from "@/services/habitService.js";
-import ApiError from "@/utils/ApiError.js";
 
 export const createHabit = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { name, color, order } = req.body;
 
-    if (!req.user) {
-      throw new ApiError("Unauthorised", 401);
-    }
-
     const habit = await habitService.createHabit(
-      req.user.id.toString(),
+      req.user!.id.toString(),
       name,
       color,
-      order
+      order,
     );
 
     res.status(201).json({
@@ -34,16 +29,12 @@ export const createHabit = async (
 export const getHabits = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
-    if (!req.user) {
-      throw new ApiError("Unauthorised", 401);
-    }
+    const habits = await habitService.getHabits(req.user!.id.toString());
 
-    const habits = await habitService.getHabits(req.user.id.toString());
-
-    res.status(209).json({
+    res.status(200).json({
       success: true,
       message: "Habits Fetched Successfully",
       data: habits,
@@ -56,15 +47,11 @@ export const getHabits = async (
 export const editHabit = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { id } = req.params;
     const { name, color, order } = req.body;
-
-    if (!req.user) {
-      throw new ApiError("Unauthorised", 401);
-    }
 
     const updates: { name?: string; color?: string; order?: number } = {};
 
@@ -74,12 +61,12 @@ export const editHabit = async (
 
     const habit = await habitService.editHabit(
       id,
-      req.user.id.toString(),
-      updates
+      req.user!.id.toString(),
+      updates,
     );
 
     res.status(200).json({
-      ssuccess: true,
+      success: true,
       message: "Habit Updated Successfully",
       data: habit,
     });
@@ -91,16 +78,12 @@ export const editHabit = async (
 export const deleteHabit = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { id } = req.params;
 
-    if (!req.user) {
-      throw new ApiError("Unauthorised", 401);
-    }
-
-    await habitService.deleteHabit(id, req.user.id.toString());
+    await habitService.deleteHabit(id, req.user!.id.toString());
 
     res.status(200).json({
       success: true,
