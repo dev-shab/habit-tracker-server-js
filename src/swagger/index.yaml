@@ -19,6 +19,8 @@ paths:
     $ref: "./paths/habitById.yaml"
   /completions:
     $ref: "./paths/completions.yaml"
+  /completions/habit/{habitId}:
+    $ref: "./paths/completionsByHabit.yaml"
 
 components:
   schemas:

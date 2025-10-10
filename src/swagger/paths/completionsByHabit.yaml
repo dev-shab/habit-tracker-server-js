@@ -1,0 +1,234 @@
+get:
+  summary: Get completions for a specific habit
+  description: |
+    Retrieves all completion records for a specific habit belonging to the authenticated user.
+
+    **Features:**
+    - Filter by date range (startDate and/or endDate)
+    - Results are sorted by date (most recent first)
+    - Returns empty array if no completions found
+
+    **Use Cases:**
+    - Get all completions: No query parameters
+    - Get completions for a month: Use startDate=2025-10-01&endDate=2025-10-31
+    - Get completions from date onwards: Use startDate=2025-10-01
+    - Get completions up to date: Use endDate=2025-10-31
+  tags:
+    - Completions
+  security:
+    - cookieAuth: []
+  parameters:
+    - name: habitId
+      in: path
+      required: true
+      description: The unique identifier of the habit
+      schema:
+        type: string
+        pattern: "^[0-9a-fA-F]{24}$"
+        example: "507f191e810c19729de860ea"
+      example: "507f191e810c19729de860ea"
+
+    - name: startDate
+      in: query
+      required: false
+      description: |
+        Start date for filtering completions (inclusive).
+        Format: YYYY-MM-DD
+      schema:
+        type: string
+        format: date
+        pattern: '^\d{4}-\d{2}-\d{2}$'
+        example: "2025-10-01"
+      examples:
+        october:
+          value: "2025-10-01"
+          summary: First day of October
+        today:
+          value: "2025-10-10"
+          summary: October 10th, 2025
+
+    - name: endDate
+      in: query
+      required: false
+      description: |
+        End date for filtering completions (inclusive).
+        Format: YYYY-MM-DD
+      schema:
+        type: string
+        format: date
+        pattern: '^\d{4}-\d{2}-\d{2}$'
+        example: "2025-10-31"
+      examples:
+        october:
+          value: "2025-10-31"
+          summary: Last day of October
+        today:
+          value: "2025-10-10"
+          summary: October 10th, 2025
+
+  responses:
+    "200":
+      description: Completions fetched successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Completions fetched successfully"
+              data:
+                type: array
+                items:
+                  $ref: "./../schemas/Completion.yaml"
+          examples:
+            withCompletions:
+              summary: Multiple completions found
+              value:
+                success: true
+                message: "Completions fetched successfully"
+                data:
+                  - _id: "67078a1234567890abcdef01"
+                    habitId: "507f191e810c19729de860ea"
+                    userId: "507f1f77bcf86cd799439011"
+                    date: "2025-10-10T00:00:00.000Z"
+                    completedAt: "2025-10-10T14:30:00.000Z"
+                    createdAt: "2025-10-10T14:30:00.000Z"
+                    updatedAt: "2025-10-10T14:30:00.000Z"
+                  - _id: "67078a1234567890abcdef02"
+                    habitId: "507f191e810c19729de860ea"
+                    userId: "507f1f77bcf86cd799439011"
+                    date: "2025-10-09T00:00:00.000Z"
+                    completedAt: "2025-10-09T08:15:00.000Z"
+                    createdAt: "2025-10-09T08:15:00.000Z"
+                    updatedAt: "2025-10-09T08:15:00.000Z"
+                  - _id: "67078a1234567890abcdef03"
+                    habitId: "507f191e810c19729de860ea"
+                    userId: "507f1f77bcf86cd799439011"
+                    date: "2025-10-07T00:00:00.000Z"
+                    completedAt: "2025-10-07T19:45:00.000Z"
+                    createdAt: "2025-10-07T19:45:00.000Z"
+                    updatedAt: "2025-10-07T19:45:00.000Z"
+
+            noCompletions:
+              summary: No completions found
+              value:
+                success: true
+                message: "Completions fetched successfully"
+                data: []
+
+            monthlyCompletions:
+              summary: Completions for October 2025
+              value:
+                success: true
+                message: "Completions fetched successfully"
+                data:
+                  - _id: "67078a1234567890abcdef01"
+                    habitId: "507f191e810c19729de860ea"
+                    userId: "507f1f77bcf86cd799439011"
+                    date: "2025-10-15T00:00:00.000Z"
+                    completedAt: "2025-10-15T09:00:00.000Z"
+                    createdAt: "2025-10-15T09:00:00.000Z"
+                    updatedAt: "2025-10-15T09:00:00.000Z"
+                  - _id: "67078a1234567890abcdef02"
+                    habitId: "507f191e810c19729de860ea"
+                    userId: "507f1f77bcf86cd799439011"
+                    date: "2025-10-10T00:00:00.000Z"
+                    completedAt: "2025-10-10T14:30:00.000Z"
+                    createdAt: "2025-10-10T14:30:00.000Z"
+                    updatedAt: "2025-10-10T14:30:00.000Z"
+
+    "400":
+      description: Bad Request - Validation error
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          examples:
+            missingHabitId:
+              summary: Habit ID missing
+              value:
+                success: false
+                message: "Habit ID is required"
+
+            invalidStartDateFormat:
+              summary: Invalid startDate format
+              value:
+                success: false
+                message: "Invalid startDate format. Use YYYY-MM-DD"
+
+            invalidEndDateFormat:
+              summary: Invalid endDate format
+              value:
+                success: false
+                message: "Invalid endDate format. Use YYYY-MM-DD"
+
+            invalidStartDate:
+              summary: Invalid startDate value
+              value:
+                success: false
+                message: "Invalid startDate"
+
+            invalidEndDate:
+              summary: Invalid endDate value
+              value:
+                success: false
+                message: "Invalid endDate"
+
+            invalidDateRange:
+              summary: Start date after end date
+              value:
+                success: false
+                message: "startDate must be before endDate"
+
+    "401":
+      description: Unauthorized - User not authenticated
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          examples:
+            notAuthenticated:
+              summary: No authentication token provided
+              value:
+                success: false
+                message: "Authentication required"
+
+            invalidToken:
+              summary: Invalid or expired token
+              value:
+                success: false
+                message: "Invalid token"
+
+    "403":
+      description: Forbidden - User does not own this habit
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: "Unauthorized to view this habit's completions"
+
+    "404":
+      description: Not Found - Habit does not exist
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: "Habit not found"
+
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: "Internal server error"

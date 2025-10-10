@@ -24,3 +24,29 @@ export const createCompletion = async (
     next(error);
   }
 };
+
+export const getCompletionsByHabit = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { habitId } = req.params;
+    const { startDate, endDate } = req.query;
+
+    const completions = await completionService.getCompletionsByHabit(
+      habitId,
+      req.user!.id.toString(),
+      startDate as string | undefined,
+      endDate as string | undefined
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Completions fetched successfully",
+      data: completions,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

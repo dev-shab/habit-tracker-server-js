@@ -36,6 +36,13 @@ export const createCompletion = async (
     throw new ApiError("Invalid Date", 400);
   }
 
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+
+  if (completionDate > today) {
+    throw new ApiError("Cannot mark habits complete in the future", 400);
+  }
+
   const completion = await Completion.create({
     habitId,
     userId,
@@ -43,4 +50,81 @@ export const createCompletion = async (
   });
 
   return completion;
+};
+
+export const getCompletionsByHabit = async (
+  habitId: string,
+  userId: string,
+  startDate?: string,
+  endDate?: string
+) => {
+  if (!habitId) {
+    throw new ApiError("Habit ID is required", 400);
+  }
+
+  const habit = await Habit.findById(habitId);
+  console.log(habit);
+
+  if (!habit) {
+    throw new ApiError("Habit not found", 404);
+  }
+
+  if (habit.userId.toString() !== userId) {
+    throw new ApiError("Unauthorized to view this habit's completions", 403);
+  }
+
+  const query: {
+    habitId: string;
+    date?: {
+      $gte?: Date;
+      $lte?: Date;
+    };
+  } = { habitId };
+
+  if (startDate || endDate) {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    query.date = {};
+
+    if (startDate) {
+      if (!dateRegex.test(startDate)) {
+        throw new ApiError("Invalid startDate format. Use YYYY-MM-DD", 400);
+      }
+
+      const start = new Date(startDate);
+      start.setUTCHours(0, 0, 0, 0);
+
+      if (isNaN(start.getTime())) {
+        throw new ApiError("Invalid startDate", 400);
+      }
+
+      query.date.$gte = start;
+    }
+
+    if (endDate) {
+      if (!dateRegex.test(endDate)) {
+        throw new ApiError("Invalid endDate format. Use YYYY-MM-DD", 400);
+      }
+
+      const start = new Date(endDate);
+      start.setUTCHours(0, 0, 0, 0);
+
+      if (isNaN(start.getTime())) {
+        throw new ApiError("Invalid endDate", 400);
+      }
+
+      query.date.$lte = start;
+    }
+
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      if (start > end) {
+        throw new ApiError("startDate must be before endDate", 400);
+      }
+    }
+  }
+
+  const completions = await Completion.find(query).sort({ date: -1 });
+
+  return completions;
 };
