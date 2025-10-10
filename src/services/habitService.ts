@@ -81,3 +81,23 @@ export const editHabit = async (
 
   return updatedHabit;
 };
+
+export const deleteHabit = async (habitId: string, userId: string) => {
+  if (!habitId) {
+    throw new ApiError("Habit ID is required", 400);
+  }
+
+  const habit = await Habit.findById(habitId);
+
+  if (!habit) {
+    throw new ApiError("Habit not found", 404);
+  }
+
+  if (habit.userId.toString() !== userId) {
+    throw new ApiError("Unauthorised to edit this Habit", 403);
+  }
+
+  await Habit.findByIdAndDelete(habitId);
+
+  return;
+};

@@ -99,3 +99,66 @@ put:
         application/json:
           schema:
             $ref: "./../schemas/Error.yaml"
+
+delete:
+  summary: Delete a habit
+  description: Deletes a habit and all its completions for the authenticated user
+  tags:
+    - Habits
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: The ID of the habit to delete
+      schema:
+        type: string
+        example: "507f191e810c19729de860ea"
+  responses:
+    "200":
+      description: Habit deleted successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: Habit deleted successfully
+    "401":
+      description: Unauthorized - user not authenticated
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Unauthorized
+    "403":
+      description: Forbidden - user does not own this habit
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Unauthorized to edit this habit
+    "404":
+      description: Habit not found
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Habit not found
+    "500":
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"

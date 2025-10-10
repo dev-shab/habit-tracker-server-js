@@ -87,3 +87,26 @@ export const editHabit = async (
     next(error);
   }
 };
+
+export const deleteHabit = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+
+    if (!req.user) {
+      throw new ApiError("Unauthorised", 401);
+    }
+
+    await habitService.deleteHabit(id, req.user.id.toString());
+
+    res.status(200).json({
+      success: true,
+      message: "Habit Deleted Successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};

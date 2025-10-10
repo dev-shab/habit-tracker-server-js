@@ -63,3 +63,6 @@ post:
         application/json:
           schema:
             $ref: "../../schemas/Error.yaml"
+          example:
+            success: false
+            message: User with this email already exists
