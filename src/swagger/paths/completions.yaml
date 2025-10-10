@@ -1,0 +1,107 @@
+post:
+  summary: Mark habit as complete
+  description: Marks a habit as complete for a specific date. Creates a completion record.
+  tags:
+    - Completions
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - habitId
+            - date
+          properties:
+            habitId:
+              type: string
+              description: The ID of the habit to mark complete
+              example: "507f191e810c19729de860ea"
+            date:
+              type: string
+              format: date
+              description: The date to mark complete (YYYY-MM-DD format)
+              example: "2025-10-10"
+  responses:
+    "201":
+      description: Habit marked complete successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: Habit marked complete successfully
+              data:
+                $ref: "./../schemas/Completion.yaml"
+    "400":
+      description: Validation error - Invalid input
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          examples:
+            missingHabitId:
+              value:
+                success: false
+                message: Habit ID is required
+            missingDate:
+              value:
+                success: false
+                message: Date is required
+            invalidDateFormat:
+              value:
+                success: false
+                message: Invalid date format. Use YYYY-MM-DD
+            invalidDate:
+              value:
+                success: false
+                message: Invalid date
+    "401":
+      description: Unauthorized - user not authenticated
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Unauthorized
+    "403":
+      description: Forbidden - user does not own this habit
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Unauthorized to mark this habit
+    "404":
+      description: Habit not found
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Habit not found
+    "409":
+      description: Conflict - Habit already marked complete for this date
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Habit already marked complete for this date
+    "500":
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"

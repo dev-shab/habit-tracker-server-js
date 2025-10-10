@@ -17,6 +17,8 @@ paths:
     $ref: "./paths/habits.yaml"
   /habits/{id}:
     $ref: "./paths/habitById.yaml"
+  /completions:
+    $ref: "./paths/completions.yaml"
 
 components:
   schemas:
@@ -24,3 +26,13 @@ components:
       $ref: "./schemas/User.yaml"
     Habit:
       $ref: "./schemas/Habit.yaml"
+    Completion:
+      $ref: "./schemas/Completion.yaml"
+    Error:
+      $ref: "./schemas/Error.yaml"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
