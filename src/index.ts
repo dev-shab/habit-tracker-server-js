@@ -5,13 +5,14 @@ import express, {
 } from "express";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import { MONGODB_CONNECTION_STRING, PORT } from "@/utils/config.js";
 import { setupSwagger } from "@/utils/swagger.js";
 import type ApiError from "@/utils/ApiError.js";
 import { BASE_URL } from "@/utils/constants.js";
 import userRouter from "@/routes/authRoutes.js";
 import habitsRouter from "@/routes/habitsRoutes.js";
-import completionsRouter from "./routes/completionsRoutes.js";
+import completionsRouter from "@/routes/completionsRoutes.js";
 
 const app = express();
 
@@ -19,6 +20,12 @@ setupSwagger(app);
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 if (MONGODB_CONNECTION_STRING) {
   mongoose.connect(MONGODB_CONNECTION_STRING).then(() => {
