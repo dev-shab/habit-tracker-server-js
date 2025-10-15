@@ -1,11 +1,34 @@
-import { loginUser, signupUser } from "@/services/authService.js";
+import { loggedInUser, loginUser, signupUser } from "@/services/authService.js";
 import { getCookieOptions } from "@/utils/cookieOptions.js";
 import { type NextFunction, type Request, type Response } from "express";
+
+export const currentUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user } = await loggedInUser(req.user!.id);
+    res.status(201).json({
+      success: true,
+      message: "Current User fetched Successfully",
+      data: {
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+        },
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const signUp = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { name, email, password } = req.body;
@@ -30,7 +53,7 @@ export const signUp = async (
 export const login = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { email, password } = req.body;
@@ -55,8 +78,8 @@ export const login = async (
 export const logout = async (req: Request, res: Response) => {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: true,
+    secure: false,
+    sameSite: "lax" as const,
   });
   res.status(200).json({
     success: true,
