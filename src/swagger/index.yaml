@@ -7,6 +7,8 @@ servers:
   - url: http://localhost:3000/api/v1
 
 paths:
+  /auth/me:
+    $ref: "./paths/auth/me.yaml"
   /auth/signup:
     $ref: "./paths/auth/signup.yaml"
   /auth/login:
