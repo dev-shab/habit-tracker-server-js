@@ -1,3 +1,53 @@
+get:
+  summary: Get single habit
+  description: Fetches habit by ID for the authenticated user.
+  tags:
+    - Habits
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: The ID of the habit to update
+      schema:
+        type: string
+        example: "507f191e810c19729de860ea"
+  responses:
+    "201":
+      description: Habit fetched successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: Habit fetched Successfully
+              data:
+                type: array
+                items:
+                  type: object
+                  $ref: "./../schemas/Habit.yaml"
+    "401":
+      description: Unauthorized - user not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+          example:
+            success: false
+            message: Unauthorized
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "./../schemas/Error.yaml"
+
 put:
   summary: Update a habit
   description: Updates an existing habit for the authenticated user. Only provided fields will be updated.

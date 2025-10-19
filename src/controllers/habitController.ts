@@ -4,7 +4,7 @@ import * as habitService from "@/services/habitService.js";
 export const createHabit = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { name, color, order } = req.body;
@@ -13,7 +13,7 @@ export const createHabit = async (
       req.user!.id.toString(),
       name,
       color,
-      order,
+      order
     );
 
     res.status(201).json({
@@ -26,10 +26,29 @@ export const createHabit = async (
   }
 };
 
+export const getHabit = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  try {
+    const habits = await habitService.getHabit(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Habit Fetched Successfully",
+      data: habits,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getHabits = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const habits = await habitService.getHabits(req.user!.id.toString());
@@ -47,7 +66,7 @@ export const getHabits = async (
 export const editHabit = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { id } = req.params;
@@ -62,7 +81,7 @@ export const editHabit = async (
     const habit = await habitService.editHabit(
       id,
       req.user!.id.toString(),
-      updates,
+      updates
     );
 
     res.status(200).json({
@@ -78,7 +97,7 @@ export const editHabit = async (
 export const deleteHabit = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { id } = req.params;

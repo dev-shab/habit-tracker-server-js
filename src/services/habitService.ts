@@ -28,6 +28,11 @@ export const createHabit = async (
   return habit;
 };
 
+export const getHabit = async (id: string) => {
+  const habit = await Habit.findById(id);
+  return habit;
+};
+
 export const getHabits = async (userId: string) => {
   const habits = await Habit.find({ userId }).sort({ order: 1 });
   return habits;
