@@ -1,0 +1,57 @@
+get:
+  summary: Current User
+  description: Returns current user based on JWT token.
+  tags:
+    - Users
+  responses:
+    "200":
+      description: Current User fetched Successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: Current User fetched Successfully
+              data:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 65b38226cb836f9e6cff7263
+                      name:
+                        type: string
+                        example: Jane Doe
+                      email:
+                        type: string
+                        example: jane.doe@example.com
+                      sections:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              example: Workout
+                            position:
+                              type: number
+                              example: 0
+                            color:
+                              type: string
+                              example: "00FF00"
+    "404":
+      description: User not found
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/Error.yaml"
+          example:
+            success: false
+            message: User not Found

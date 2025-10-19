@@ -3,10 +3,18 @@ import { User } from "@/models/User.js";
 import ApiError from "@/utils/ApiError.js";
 import { generateToken } from "@/utils/jwt.js";
 
+export const loggedInUser = async (id: string) => {
+  const user = await User.findById(id);
+  if (!user) {
+    throw new ApiError("User not found", 404);
+  }
+  return { user };
+};
+
 export const signupUser = async (
   name: string,
   email: string,
-  password: string,
+  password: string
 ) => {
   if (!name || name.trim().length === 0) {
     throw new ApiError("User Name is Required", 400);
